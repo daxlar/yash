@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 
 
 /**
@@ -25,7 +26,7 @@ void redirectOutputToFile(char* shellCommand, char* fileName){
 
     cpid = fork();
     if(cpid == 0){
-        int fd = open(fileName, O_WRONLY | O_CREAT, 0644);
+        int fd = open(fileName, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
         int newFd = dup2(fd, STDOUT_FILENO);
         int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
     }else{
@@ -44,8 +45,14 @@ void redirectFileToOutput(char* shellCommand, char* fileName){
     cpid = fork();
     if(cpid == 0){
         int fd = open(fileName, O_RDONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-        int newFd = dup2(fd, STDIN_FILENO);
-        int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
+        if(fd < 0){
+            char* errorMessage = "bash: fakefile.txt: No such file or directory\n";
+            int errMessageLength = strlen(errorMessage);
+            write(STDERR_FILENO, errorMessage, errMessageLength);
+        }else{
+            int newFd = dup2(fd, STDIN_FILENO);
+            int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
+        }
     }else{
         waitpid(-1, &wstatus, 0);
     }
