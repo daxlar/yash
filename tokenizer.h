@@ -1,1 +1,1 @@
-void processCommand(char* commandString);
+void processInput(char* inputString);

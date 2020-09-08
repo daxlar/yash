@@ -15,7 +15,7 @@ int main(int argc, char** argv){
     
     while(result = readline(prompt)){
         
-        processCommand(result);
+        processInput(result);
         free(result);
     }
 
