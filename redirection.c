@@ -1,8 +1,12 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+
 
 /**
  * fork and create child
@@ -39,7 +43,7 @@ void redirectFileToOutput(char* shellCommand, char* fileName){
 
     cpid = fork();
     if(cpid == 0){
-        int fd = open(fileName, O_RDONLY | O_CREAT, 0644);
+        int fd = open(fileName, O_RDONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
         int newFd = dup2(fd, STDIN_FILENO);
         int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
     }else{

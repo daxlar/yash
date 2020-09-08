@@ -1,0 +1,1 @@
+void pipeCommands(char* shellCommand1, char* shellCommand2);

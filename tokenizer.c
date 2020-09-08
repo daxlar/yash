@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "redirection.h"
+#include "pipe.h"
 
 #define DEBUG_TOKENIZER 0
 
@@ -45,6 +46,10 @@ void processCommand(char* commandString){
 
     if(strcmp(tokenArray[1], "<") == 0){
         redirectFileToOutput(tokenArray[0], tokenArray[2]);
+    }
+
+    if(strcmp(tokenArray[1], "|") == 0){
+        pipeCommands(tokenArray[0], tokenArray[2]);
     }
 
     for(int i = 0; i < tokenCount; i++){
