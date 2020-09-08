@@ -21,7 +21,7 @@ void redirectOutputToFile(char* shellCommand, char* fileName){
 
     cpid = fork();
     if(cpid == 0){
-        int fd = open(fileName, O_WRONLY | O_APPEND | O_CREAT, 0644);
+        int fd = open(fileName, O_WRONLY | O_CREAT, 0644);
         int newFd = dup2(fd, STDOUT_FILENO);
         int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
     }else{
@@ -39,7 +39,7 @@ void redirectFileToOutput(char* shellCommand, char* fileName){
 
     cpid = fork();
     if(cpid == 0){
-        int fd = open(fileName, O_RDONLY | O_APPEND | O_CREAT, 0644);
+        int fd = open(fileName, O_RDONLY | O_CREAT, 0644);
         int newFd = dup2(fd, STDIN_FILENO);
         int errorValue = execlp(shellCommand, shellCommand, (char*)NULL);
     }else{
