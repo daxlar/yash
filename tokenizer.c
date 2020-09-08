@@ -2,10 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "redirection.h"
 
+#define DEBUG_TOKENIZER 0
 
 char** tokenArray;
-
 
 void processCommand(char* commandString){
 
@@ -15,9 +16,11 @@ void processCommand(char* commandString){
             numSpaces++;
         }
     }
-    
-    tokenArray = (char**)malloc((numSpaces + 1) * sizeof(char*));
+    if(DEBUG_TOKENIZER == 1){
+        printf("number of spaces: %d \n", numSpaces);
+    }
 
+    tokenArray = (char**)malloc((numSpaces + 1) * sizeof(char*));
     const char* delimiter = " ";
     char* tokenPtr = strtok(commandString, delimiter);
     int tokenCount = 0;
@@ -28,9 +31,20 @@ void processCommand(char* commandString){
         tokenPtr = strtok(NULL, delimiter);
         tokenCount++;
     }
+    
+    if(DEBUG_TOKENIZER == 1){
+        for(int i = 0; i < tokenCount; i++){
+            int stringLength = strlen(tokenArray[i]);
+            printf("%s, string length: %d \n", tokenArray[i], stringLength);
+        }
+    }
 
-    for(int i = 0; i < tokenCount; i++){
-        printf("%s\n", tokenArray[i]);
+    if(strcmp(tokenArray[1], ">") == 0){
+        redirectOutputToFile(tokenArray[0], tokenArray[2]);
+    }
+
+    if(strcmp(tokenArray[1], "<") == 0){
+        redirectFileToOutput(tokenArray[0], tokenArray[2]);
     }
 
     for(int i = 0; i < tokenCount; i++){

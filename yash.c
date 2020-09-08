@@ -10,7 +10,7 @@
 
 int main(int argc, char** argv){
 
-    const char* prompt = "#";
+    const char* prompt = "# ";
     char* result;
     
     while(result = readline(prompt)){
