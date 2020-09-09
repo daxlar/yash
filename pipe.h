@@ -1,1 +1,1 @@
-void pipeCommands(char* shellCommand1, char* shellCommand2);
+void processPipe(char** inputTokenArray, int inputTokenArrayLength);
